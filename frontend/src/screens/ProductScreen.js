@@ -30,7 +30,7 @@ function ProductScreen() {
   const params = useParams();
   const { id } = params;
 
-  const [{ loading, error, product }, dispath] = useReducer(reducer, {
+  const [{ loading, error, product }, dispatch] = useReducer(reducer, {
     product: [],
     loading: true,
     error: '',
@@ -38,25 +38,24 @@ function ProductScreen() {
 
   useEffect(() => {
     const fetchData = async () => {
-      dispath({ type: 'FETCH_REQUEST ' });
+      dispatch({ type: 'FETCH_REQUEST ' });
       try {
         const result = await axios.get(`/api/products/id/${id}`);
-        dispath({ type: 'FETCH_SUCCES', payload: result.data });
+        dispatch({ type: 'FETCH_SUCCES', payload: result.data });
       } catch (err) {
-        dispath({ type: 'FETCH_FAIL', payload: getError(err) });
+        dispatch({ type: 'FETCH_FAIL', payload: getError(err) });
       }
     };
     fetchData();
   }, [id]);
 
   const { state, dispatch: ctxDispatch } = useContext(Store);
-
-  const addToCartHandler = () => {
+  const addToCartHandler = () => [
     ctxDispatch({
       type: 'CART_ADD_ITEM',
       payload: { ...product, quantity: 1 },
-    });
-  };
+    }),
+  ];
 
   return loading ? (
     <LoadingBox />

@@ -21,7 +21,7 @@ const reducer = (state, action) => {
 };
 
 export default function HomeScreen() {
-  const [{ loading, error, products }, dispath] = useReducer(reducer, {
+  const [{ loading, error, products }, dispatch] = useReducer(reducer, {
     products: [],
     loading: true,
     error: '',
@@ -29,12 +29,12 @@ export default function HomeScreen() {
 
   useEffect(() => {
     const fetchData = async () => {
-      dispath({ type: 'FETCH_REQUEST ' });
+      dispatch({ type: 'FETCH_REQUEST ' });
       try {
         const result = await axios.get('/api/products');
-        dispath({ type: 'FETCH_SUCCES', payload: result.data });
+        dispatch({ type: 'FETCH_SUCCES', payload: result.data });
       } catch (err) {
-        dispath({ type: 'FETCH_FAIL', payload: err.message });
+        dispatch({ type: 'FETCH_FAIL', payload: err.message });
       }
     };
     fetchData();
